@@ -107,13 +107,5 @@ private fun FinalScoreDialog(score: Int, onPlayAgain: () -> Unit, modifier: Modi
         }
     )
 }
-@Composable
-fun shareList(testViewModel: TestViewModel = viewModel(factory = AppViewModelProvider.Factory)): List<Item> {
-    val homeUiState by testViewModel.testUiState.collectAsState()
-    return homeUiState.itemList
-}
-//fun getHomeItemList(testViewModel: TestViewModel): List<Item> {
-//    val homeUiState by testViewModel.testUiState.collectAsState()
-//    return homeUiState.itemList
-//}
+
 

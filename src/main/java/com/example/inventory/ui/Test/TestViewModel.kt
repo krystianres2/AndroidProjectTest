@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.lang.reflect.Array.get
 
-class TestViewModel( val itemsRepository: ItemsRepository) : ViewModel() {
+class TestViewModel( itemsRepository: ItemsRepository) : ViewModel() {
     val testUiState: StateFlow<TestItems> = itemsRepository.getAllItemsStream()
         .map { TestItems(it) }
         .stateIn(
@@ -28,22 +28,27 @@ class TestViewModel( val itemsRepository: ItemsRepository) : ViewModel() {
     private var usedWords: MutableList<Item> = mutableListOf()
     private lateinit var currentWord: String
     private lateinit var correctAnswer: String
+    //    private val itemsList: StateFlow<TestItems> = itemsRepository.getAllItemsStream().map { TestItems(it) }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(
+//      TIMEOUT_MILLIS), initialValue = TestItems()
+//    )
+//    private var itemsList: List<Item> = testUiState.value.itemList
 
     init {
-        @Composable
-        fun a(){
-        getSharedItemList()}
-        resetGame()
+
+        try {
+            correctAnswer=""
+            resetGame()
+        }catch (e : NoSuchElementException){
+            e.stackTrace
+        }
     }
 
-//    private val itemsList: List<Item>
-//        get() = testUiState.value.itemList
-    var itemsList: List<Item> = emptyList()
+    private val itemsList: List<Item>
+        get() = testUiState.value.itemList
+//val itemsListList: MutableList<Item> = mutableListOf()
 
     val listSize: Int
         get() = itemsList.size
-
-
 
     fun resetGame() {
         usedWords.clear()
@@ -89,11 +94,7 @@ class TestViewModel( val itemsRepository: ItemsRepository) : ViewModel() {
             usedWords.add(Object)
         }
     }
-@Composable
-    fun getSharedItemList() {
-    itemsList= shareList(this)
-//        return shareList(this)
-    }
+
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
